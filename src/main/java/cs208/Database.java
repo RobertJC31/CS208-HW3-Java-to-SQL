@@ -392,7 +392,7 @@ public class Database
         {
             sqlStatement.setString(1, newStudent.getFirstName());
             sqlStatement.setString(2, newStudent.getLastName());
-            sqlStatement.setString(3, newStudent.getBirthDate().toString());
+            sqlStatement.setDate(3, newStudent.getBirthDate());
 
             int numberOfRowsAffected = sqlStatement.executeUpdate();
             System.out.println("numberOfRowsAffected = " + numberOfRowsAffected);
@@ -417,6 +417,29 @@ public class Database
         }
         catch (SQLException sqlException)
         {
+            System.out.println("!!! SQLException: failed to insert into the classes table");
+            System.out.println(sqlException.getMessage());
+        }
+    }
+
+    public void addNewStudentToClass(int classCode, int studentID) {
+        String sql =
+                "INSERT INTO registered_students (class_id, student_id)\n" +
+                        "VALUES (?, ?);";
+
+        try (
+                Connection connection = getDatabaseConnection();
+                PreparedStatement sqlStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        )
+        {
+
+            sqlStatement.setInt(1, classCode);
+            sqlStatement.setInt(2, studentID);
+
+            int numberOfRowsAffected = sqlStatement.executeUpdate();
+            System.out.println("numberOfRowsAffected = " + numberOfRowsAffected);
+
+        } catch (SQLException sqlException) {
             System.out.println("!!! SQLException: failed to insert into the classes table");
             System.out.println(sqlException.getMessage());
         }

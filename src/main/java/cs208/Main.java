@@ -133,13 +133,36 @@ public class Main
                     menuListAllRegisteredStudents();
                     break;
 
-                //TODO: add your code here
+                case 31:
+                    menuAddNewStudentToClass();
+                    break;
 
 
                 default:
                     System.out.println("Invalid choice. Please enter a number such as 0, 1, 2, 10, 11, etc.");
             }
         }
+    }
+
+    private static void menuAddNewStudentToClass() {
+        System.out.println("Adding student to class;");
+
+        int studentID;
+        int classCode;
+
+        try {
+            System.out.print("Enter the class code: ");
+            classCode = Integer.parseInt(inputScanner.nextLine());
+
+            System.out.print("Enter the student ID: ");
+            studentID = Integer.parseInt(inputScanner.nextLine());
+        } catch (Exception e)
+        {
+            System.out.println("Invalid input, please try again.");
+            return;
+        }
+
+        database.addNewStudentToClass(classCode, studentID);
     }
 
     public static void menuTestConnection()
