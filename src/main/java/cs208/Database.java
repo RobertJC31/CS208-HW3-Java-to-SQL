@@ -2,6 +2,7 @@ package cs208;
 
 import org.sqlite.SQLiteConfig;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -380,7 +381,45 @@ public class Database
         // to set the date parameter in the unix format (i.e., milliseconds since 1970), use this code:
         // sqlStatement.setDate(columnIndexTBD, newStudent.getBirthDate());
 
-        // TODO: add your code here
+        String sql =
+                "INSERT INTO classes (first_name, last_name, birth_date)\n" +
+                        "VALUES (?, ?, ?);";
+
+        try (
+                        Connection connection = getDatabaseConnection();
+                        PreparedStatement sqlStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                        )
+        {
+            sqlStatement.setString(1, newStudent.getFirstName());
+            sqlStatement.setString(2, newStudent.getLastName());
+            sqlStatement.setString(3, newStudent.getBirthDate().toString());
+
+            int numberOfRowsAffected = sqlStatement.executeUpdate();
+            System.out.println("numberOfRowsAffected = " + numberOfRowsAffected);
+
+            if (numberOfRowsAffected > 0)
+            {
+                ResultSet resultSet = sqlStatement.getGeneratedKeys();
+
+                while (resultSet.next())
+                {
+                    // "last_insert_rowid()" is the column name that contains the id of the last inserted row
+                    // alternatively, we could have used resultSet.getInt(1); to get the id of the first column returned
+                    int generatedIdForTheNewlyInsertedClass = resultSet.getInt("last_insert_rowid()");
+                    System.out.println("SUCCESSFULLY inserted a new class with id = " + generatedIdForTheNewlyInsertedClass);
+
+                    // this can be useful if we need to make additional processing on the newClass object
+                    newStudent.setId(generatedIdForTheNewlyInsertedClass);
+                }
+
+                resultSet.close();
+            }
+        }
+        catch (SQLException sqlException)
+        {
+            System.out.println("!!! SQLException: failed to insert into the classes table");
+            System.out.println(sqlException.getMessage());
+        }
     }
 
     public void listAllRegisteredStudents()
