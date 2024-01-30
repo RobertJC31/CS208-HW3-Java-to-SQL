@@ -361,7 +361,7 @@ public class Database
                 // the resultSet.getDate() does not work in this case, so we're using the getString() method instead
                 String birthDate = resultSet.getString("birth_date");
 
-                // TODO: add your code here
+                System.out.printf("| %d | %s | %s | %s |%n", id, firstName, lastName, birthDate);
             }
         }
         catch (SQLException sqlException)
