@@ -455,6 +455,43 @@ public class Database
         }
     }
 
+    public void updateExistingStudentInformation(int studentID, String firstName, String lastName, Date birthDate)
+    {
+        String sql =
+                "UPDATE students\n" +
+                        "SET first_name = ?, last_name = ?, birth_date = ?\n" +
+                        "WHERE id = ?;";
+
+        try
+                (
+                        Connection connection = getDatabaseConnection();
+                        PreparedStatement sqlStatement = connection.prepareStatement(sql);
+                )
+        {
+            sqlStatement.setString(1, firstName);
+            sqlStatement.setString(2, lastName);
+            sqlStatement.setString(3, birthDate.toString());
+            sqlStatement.setInt(4, studentID);
+
+            int numberOfRowsAffected = sqlStatement.executeUpdate();
+            System.out.println("numberOfRowsAffected = " + numberOfRowsAffected);
+
+            if (numberOfRowsAffected > 0)
+            {
+                System.out.println("SUCCESSFULLY updated the class with id = " + studentID);
+            }
+            else
+            {
+                System.out.println("!!! WARNING: failed to update the student with id = " + studentID);
+            }
+        }
+        catch (SQLException sqlException)
+        {
+            System.out.println("!!! SQLException: failed to update the student with id = " + studentID);
+            System.out.println(sqlException.getMessage());
+        }
+    }
+
     public void addNewStudentToClass(int classCode, int studentID) {
         String sql =
                 "INSERT INTO registered_students (class_id, student_id)\n" +

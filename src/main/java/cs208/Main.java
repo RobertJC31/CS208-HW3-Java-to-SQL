@@ -328,9 +328,32 @@ public class Main
 
     private static void menuUpdateExistingStudentInformation()
     {
+        int studentID;
+        String firstName;
+        String lastName;
+        Date birthDate;
+
         System.out.println("Updating existing student information...");
 
-        // TODO: add your code here
+        try {
+            System.out.print("Enter the student's ID: ");
+            studentID = Integer.parseInt(inputScanner.nextLine());
+
+            System.out.print("Enter the student's first name: ");
+            firstName = inputScanner.nextLine();
+
+            System.out.print("Enter the student's last name: ");
+            lastName = inputScanner.nextLine();
+
+            System.out.print("Enter the student's birth date in ISO format (yyyy-mm-dd): ");
+            birthDate = Date.valueOf(inputScanner.nextLine());
+
+        } catch (Exception e) {
+            System.out.println("Invalid input, please try again.");
+            return;
+        }
+
+        database.updateExistingStudentInformation(studentID, firstName, lastName, birthDate);
     }
 
     private static void menuDeleteExistingStudent()
