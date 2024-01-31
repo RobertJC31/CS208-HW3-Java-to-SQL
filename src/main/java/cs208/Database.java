@@ -382,7 +382,7 @@ public class Database
         // sqlStatement.setDate(columnIndexTBD, newStudent.getBirthDate());
 
         String sql =
-                "INSERT INTO classes (first_name, last_name, birth_date)\n" +
+                "INSERT INTO students (first_name, last_name, birth_date)\n" +
                         "VALUES (?, ?, ?);";
 
         try (
@@ -392,7 +392,7 @@ public class Database
         {
             sqlStatement.setString(1, newStudent.getFirstName());
             sqlStatement.setString(2, newStudent.getLastName());
-            sqlStatement.setDate(3, newStudent.getBirthDate());
+            sqlStatement.setString(3, newStudent.getBirthDate().toString());
 
             int numberOfRowsAffected = sqlStatement.executeUpdate();
             System.out.println("numberOfRowsAffected = " + numberOfRowsAffected);
@@ -418,6 +418,39 @@ public class Database
         catch (SQLException sqlException)
         {
             System.out.println("!!! SQLException: failed to insert into the classes table");
+            System.out.println(sqlException.getMessage());
+        }
+    }
+
+    public void deleteExistingStudent(int studentID)
+    {
+        String sql =
+                "DELETE FROM students\n" +
+                        "WHERE id = ?;";
+
+        try
+                (
+                        Connection connection = getDatabaseConnection();
+                        PreparedStatement sqlStatement = connection.prepareStatement(sql);
+                )
+        {
+            sqlStatement.setInt(1, studentID);
+
+            int numberOfRowsAffected = sqlStatement.executeUpdate();
+            System.out.println("numberOfRowsAffected = " + numberOfRowsAffected);
+
+            if (numberOfRowsAffected > 0)
+            {
+                System.out.println("SUCCESSFULLY deleted the class with id = " + studentID);
+            }
+            else
+            {
+                System.out.println("!!! WARNING: failed to delete the class with id = " + studentID);
+            }
+        }
+        catch (SQLException sqlException)
+        {
+            System.out.println("!!! SQLException: failed to delete the class with id = " + studentID);
             System.out.println(sqlException.getMessage());
         }
     }

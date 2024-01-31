@@ -175,11 +175,13 @@ public class Main
         int studentID;
 
         try {
-            System.out.print("Enter the class code: ");
-            classCode = Integer.parseInt(inputScanner.nextLine());
 
             System.out.print("Enter the student ID: ");
             studentID = Integer.parseInt(inputScanner.nextLine());
+
+            System.out.print("Enter the class code: ");
+            classCode = Integer.parseInt(inputScanner.nextLine());
+
         } catch (Exception e)
         {
             System.out.println("Invalid input, please try again.");
@@ -304,9 +306,14 @@ public class Main
         Date birthDate = null;
         try
         {
-            // TODO: add your code here
 
-            System.out.print("Enter the student birth date in ISO format (yyyy-mm-dd): ");
+            System.out.print("Enter the student's first name: ");
+            firstName = inputScanner.nextLine();
+
+            System.out.print("Enter the student's last name: ");
+            lastName = inputScanner.nextLine();
+
+            System.out.print("Enter the student's birth date in ISO format (yyyy-mm-dd): ");
             birthDate = Date.valueOf(inputScanner.nextLine());
         }
         catch (Exception e)
@@ -315,7 +322,8 @@ public class Main
             return;
         }
 
-        // TODO: add your code here
+        Student newStudent = new Student(firstName, lastName, birthDate);
+        database.addNewStudent(newStudent);
     }
 
     private static void menuUpdateExistingStudentInformation()
@@ -327,9 +335,18 @@ public class Main
 
     private static void menuDeleteExistingStudent()
     {
-        System.out.println("Deleting existing student...");
+        int studentID;
+        try {
+            System.out.println("Deleting existing student...");
+            System.out.print("Enter student ID: ");
+            studentID = Integer.parseInt(inputScanner.nextLine());
+        } catch (Exception e) {
+            System.out.println("Invalid input, please try again.");
+            return;
+        }
 
-        // TODO: add your code here
+        database.deleteExistingStudent(studentID);
+
     }
 
     private static void menuListAllRegisteredStudents()
