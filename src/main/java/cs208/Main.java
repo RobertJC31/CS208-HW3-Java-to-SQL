@@ -140,11 +140,32 @@ public class Main
                 case 32:
                     menuDropStudentFromClass();
                     break;
+
+                case 33:
+                    menuListStudentsInClass();
+                    break;
                     
                 default:
                     System.out.println("Invalid choice. Please enter a number such as 0, 1, 2, 10, 11, etc.");
             }
         }
+    }
+
+    private static void menuListStudentsInClass() {
+        System.out.println("List all students in a class: ");
+
+        int classCode;
+
+        try {
+            System.out.print("Enter the class ID: ");
+            classCode = Integer.parseInt(inputScanner.nextLine());
+        } catch (Exception e)
+        {
+            System.out.println("Invalid input, please try again.");
+            return;
+        }
+
+        database.listAllStudentsInClass(classCode);
     }
 
     private static void menuDropStudentFromClass() {

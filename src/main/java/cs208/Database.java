@@ -182,6 +182,50 @@ public class Database
         }
     }
 
+    public void listAllStudentsInClass(int classID) {
+
+        String sql =
+                "SELECT students.first_name, students.last_name\n" +
+                "FROM students\n" +
+                "JOIN registered_students ON students.id = registered_students.student_id\n" +
+                        "WHERE registered_students.class_id = ?;";
+
+        try
+                (
+                        Connection connection = getDatabaseConnection();
+                        PreparedStatement sqlStatement = connection.prepareStatement(sql);
+                )
+        {
+
+            sqlStatement.setInt(1, classID);
+            ResultSet resultSet = sqlStatement.executeQuery();
+
+
+            //print table header
+            printTableHeader(new String[]{"first name", "last"});
+
+            // resultSet.next() either
+            // advances to the next returned record (row)
+            // or
+            // returns false if there are no more records
+            while (resultSet.next())
+            {
+                // extract the values from the current row
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+
+                // print the results of the current row
+                System.out.printf("| %s | %s |%n", firstName, lastName);
+            }
+        }
+        catch (SQLException sqlException)
+        {
+            System.out.println("!!! SQLException: failed to query the classes table. Make sure you executed the schema.sql and seeds.sql scripts");
+            System.out.println(sqlException.getMessage());
+        }
+
+    }
+
     public void listAllClasses()
     {
         String sql =
