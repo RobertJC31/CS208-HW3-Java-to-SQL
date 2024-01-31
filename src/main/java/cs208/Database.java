@@ -445,6 +445,26 @@ public class Database
         }
     }
 
+    public void dropStudentFromClass(int classCode, int studentID) {
+        String sql =
+                "DELETE FROM registered_students\n" +
+                        "WHERE student_id = ? AND class_id = ?;";
+        try (
+                Connection connection = getDatabaseConnection();
+                PreparedStatement sqlStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ) {
+            sqlStatement.setInt(1, studentID);
+            sqlStatement.setInt(2, classCode);
+
+            int numberOfRowsAffected = sqlStatement.executeUpdate();
+            System.out.println("numberOfRowsAffected = " + numberOfRowsAffected);
+        } catch (SQLException sqlException)
+        {
+            System.out.println("!!! SQLException: failed to insert into the classes table");
+            System.out.println(sqlException.getMessage());
+        }
+    }
+
     public void listAllRegisteredStudents()
     {
         String sql =

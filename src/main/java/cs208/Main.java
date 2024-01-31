@@ -137,18 +137,42 @@ public class Main
                     menuAddNewStudentToClass();
                     break;
 
-
+                case 32:
+                    menuDropStudentFromClass();
+                    break;
+                    
                 default:
                     System.out.println("Invalid choice. Please enter a number such as 0, 1, 2, 10, 11, etc.");
             }
         }
     }
 
-    private static void menuAddNewStudentToClass() {
-        System.out.println("Adding student to class;");
+    private static void menuDropStudentFromClass() {
+        System.out.println("Drop student from class... ");
 
-        int studentID;
         int classCode;
+        int studentID;
+
+        try {
+            System.out.print("Enter the class code: ");
+            classCode = Integer.parseInt(inputScanner.nextLine());
+
+            System.out.print("Enter the student ID: ");
+            studentID = Integer.parseInt(inputScanner.nextLine());
+        } catch (Exception e)
+        {
+            System.out.println("Invalid input, please try again.");
+            return;
+        }
+
+        database.dropStudentFromClass(classCode, studentID);
+    }
+
+    private static void menuAddNewStudentToClass() {
+        System.out.println("Add student to class... ");
+
+        int classCode;
+        int studentID;
 
         try {
             System.out.print("Enter the class code: ");
