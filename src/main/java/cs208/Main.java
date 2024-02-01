@@ -279,29 +279,18 @@ public class Main
 
     private static void menuUpdateExistingClassInformation()
     {
+        int id;
+        int classMaxStudents;
+        Class existingClass;
+        String classCode;
+        String classTitle;
+        String classDescription;
+
         System.out.println("Updating existing class information...");
 
-        int id = 0;
-        String code = null;
-        String title = null;
-        String description = null;
-        int maxStudents = 0;
-        try
-        {
-            System.out.print("Enter the existing class id you want to update: ");
+        System.out.print("Enter the existing class id you want to update: ");
+        try {
             id = Integer.parseInt(inputScanner.nextLine());
-
-            System.out.print("Enter a new class code: ");
-            code = inputScanner.nextLine();
-
-            System.out.print("Enter a new class title: ");
-            title = inputScanner.nextLine();
-
-            System.out.print("Enter a new class description: ");
-            description = inputScanner.nextLine();
-
-            System.out.print("Enter a new class max students: ");
-            maxStudents = Integer.parseInt(inputScanner.nextLine());
         }
         catch (Exception e)
         {
@@ -309,8 +298,47 @@ public class Main
             return;
         }
 
-        Class classToUpdate = new Class(id, code, title, description, maxStudents);
-        database.updateExistingClassInformation(classToUpdate);
+        existingClass = database.getExistingClassInformation(id);
+        classCode = existingClass.getCode();
+        classTitle = existingClass.getTitle();
+        classDescription = existingClass.getDescription();
+        classMaxStudents = existingClass.getMaxStudents();
+
+        try {
+            System.out.printf("Enter a new class code (or enter to keep \"%s\"): ", classCode);
+            String classCodeInput = inputScanner.nextLine();
+
+            System.out.printf("Enter a new class title (or enter to keep \"%s\"): ", classTitle);
+            String classTitleInput = inputScanner.nextLine();
+
+            System.out.printf("Enter a new class code (or enter to keep \"%s\"): ", classDescription);
+            String classDescriptionInput = inputScanner.nextLine();
+
+            System.out.printf("Enter a new class code (or enter to keep \"%d\"): ", classMaxStudents);
+            String classMaxStudentsInput = inputScanner.nextLine();
+
+            if (classCodeInput != "") {
+                classCode = classCodeInput;
+            }
+            if (classTitleInput != "") {
+                classTitle = classTitleInput;
+            }
+            if (classDescriptionInput != "") {
+                classDescription = classDescriptionInput;
+            }
+            if (classMaxStudentsInput != "") {
+                classMaxStudents = Integer.parseInt(classMaxStudentsInput);
+            }
+
+            Class updatedClass = new Class(existingClass.getId(), classCode, classTitle, classDescription, classMaxStudents);
+
+            database.updateExistingClassInformation(updatedClass);
+
+        }
+        catch (Exception e) {
+            System.out.println("An error has occured.");
+        }
+
     }
 
     private static void menuDeleteExistingClass()

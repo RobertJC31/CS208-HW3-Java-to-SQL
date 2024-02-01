@@ -353,6 +353,58 @@ public class Database
         }
     }
 
+    public Class getExistingClassInformation(int classIDCode) {
+        Class newClass = null;
+
+        String sql =
+                "SELECT *\n" +
+                "FROM classes\n" +
+                "WHERE classes.id = ?;";
+        try
+                (
+                        Connection connection = getDatabaseConnection();
+                        PreparedStatement sqlStatement = connection.prepareStatement(sql);
+
+                )
+        {
+
+            sqlStatement.setInt(1, classIDCode);
+            ResultSet resultSet = sqlStatement.executeQuery();
+
+            int classID = -1;
+            int maxStudents = -1;
+            String classCode = null;
+            String classTitle = null;
+            String classDescription = null;
+
+            while (resultSet.next())
+            {
+                // extract the values from the current row
+                classID = resultSet.getInt("id");
+                classCode = resultSet.getString("code");
+                classTitle = resultSet.getString("title");
+                classDescription = resultSet.getString("description");
+                maxStudents = resultSet.getInt("max_students");
+            }
+
+            newClass = new Class(classID, classCode, classTitle, classDescription, maxStudents);
+
+            // get the results of the first column in the row which contains the driver version
+            String driverVersionToConnectToTheDatabase = resultSet.getString(1);
+            System.out.println("Connection to Database Successful!");
+            System.out.println("Driver version used to connect to the database: " + driverVersionToConnectToTheDatabase);
+        }
+        catch (SQLException sqlException)
+        {
+            System.err.println("SQLException: failed to query the database");
+            System.err.println(sqlException.getMessage());
+        }
+
+        return newClass;
+
+    }
+
+
     public void updateExistingClassInformation(Class classToUpdate)
     {
         String sql =
