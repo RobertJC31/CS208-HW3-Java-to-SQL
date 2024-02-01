@@ -144,6 +144,10 @@ public class Main
                 case 33:
                     menuListStudentsInClass();
                     break;
+
+                case 34:
+                    menuListStudentsClasses();
+                    break;
                     
                 default:
                     System.out.println("Invalid choice. Please enter a number such as 0, 1, 2, 10, 11, etc.");
@@ -151,8 +155,24 @@ public class Main
         }
     }
 
+    private static void menuListStudentsClasses() {
+        int studentID;
+
+        System.out.println("List all of a student's enrolled classes... ");
+        try {
+            System.out.print("Enter the student ID: ");
+            studentID = Integer.parseInt(inputScanner.nextLine());
+        } catch (Exception e)
+        {
+            System.out.println("Invalid input, please try again.");
+            return;
+        }
+
+        database.listStudentsClasses(studentID);
+    }
+
     private static void menuListStudentsInClass() {
-        System.out.println("List all students in a class: ");
+        System.out.println("List all students in a class... ");
 
         int classCode;
 

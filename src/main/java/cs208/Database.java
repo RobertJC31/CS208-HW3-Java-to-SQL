@@ -226,6 +226,48 @@ public class Database
 
     }
 
+    public void listStudentsClasses(int studentID) {
+        String sql =
+                "SELECT classes.title\n" +
+                        "FROM classes\n" +
+                        "JOIN registered_students ON classes.id = registered_students.class_id\n" +
+                        "WHERE registered_students.student_id = ?;";
+
+        try
+                (
+                        Connection connection = getDatabaseConnection();
+                        PreparedStatement sqlStatement = connection.prepareStatement(sql);
+                )
+        {
+
+            sqlStatement.setInt(1, studentID);
+            ResultSet resultSet = sqlStatement.executeQuery();
+
+
+            //print table header
+            printTableHeader(new String[]{"Class"});
+
+            // resultSet.next() either
+            // advances to the next returned record (row)
+            // or
+            // returns false if there are no more records
+            while (resultSet.next())
+            {
+                // extract the values from the current row
+                String className = resultSet.getString("title");
+
+                // print the results of the current row
+                System.out.printf("| %s |%n", className);
+            }
+        }
+        catch (SQLException sqlException)
+        {
+            System.out.println("!!! SQLException: failed to query the classes table. Make sure you executed the schema.sql and seeds.sql scripts");
+            System.out.println(sqlException.getMessage());
+        }
+
+    }
+
     public void listAllClasses()
     {
         String sql =
